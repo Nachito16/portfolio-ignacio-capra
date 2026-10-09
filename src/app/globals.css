@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Core tokens */
+  --color-ink: #0b0f14;
+  --color-ink-soft: #171d25;
+  --color-paper: #f2f3ef;
+  --color-paper-alt: #e8eae4;
+  --color-muted: #66706c;
+  --color-acid: #b7f24a;
+  --color-acid-deep: #86b82e;
+
+  /* Text on paper */
+  --color-body: #4f5854;
+  --color-body-strong: #46504c;
+  --color-nav: #525a57;
+  --color-feature: #4c5552;
+  --color-label: #59625f;
+
+  /* Text on ink */
+  --color-dim-1: #939c98;
+  --color-dim-2: #a4aca8;
+  --color-dim-3: #8c9591;
+  --color-dim-4: #bec5c2;
+  --color-dim-5: #d7ddd8;
+
+  /* Surfaces & accents */
+  --color-code-string: #c7a6ff;
+  --color-stage-handstats: #dce0d7;
+  --color-stage-sens: #d9d4c9;
+  --color-coral: #ff6e4a;
+
+  /* Lines */
+  --color-line: rgb(11 15 20 / 0.14);
+  --color-line-soft: rgb(11 15 20 / 0.08);
+  --color-line-strong: rgb(11 15 20 / 0.22);
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-reveal: reveal 700ms both cubic-bezier(0.22, 1, 0.36, 1);
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--color-paper);
+  }
+
+  body {
+    color: var(--color-ink);
+    background: var(--color-paper);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    color: var(--color-ink);
+    background: var(--color-acid);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  /* Dark surfaces: acid focus ring stays visible on ink. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-acid);
+  }
+}
+
+@layer components {
+  /* Prevents horizontal overflow from decorative elements without breaking position: sticky. */
+  .site-shell {
+    min-width: 320px;
+    overflow-x: clip;
+  }
+
+  /* Full-bleed band whose content aligns to the 1180px grid. */
+  .bleed {
+    padding-inline: max(24px, calc((100% - 1180px) / 2));
+  }
+}
+
+/* Scroll reveal. Only applies when JS is available (see RevealObserver). */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 700ms var(--ease-out-expo),
+    transform 700ms var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
