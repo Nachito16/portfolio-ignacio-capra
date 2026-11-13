@@ -1,11 +1,14 @@
 import { Container } from "@/components/ui/Container";
 import { FactStrip } from "@/components/ui/FactStrip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { profile } from "@/data/profile";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProfile } from "@/data/profile";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-export function About({ dict }: { dict: Dictionary }) {
-  const [lead, ...paragraphs] = profile.about;
+export function About({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const [lead, ...paragraphs] = getProfile(locale).about;
+  const facts = getProfile(locale).facts;
   const { eyebrow, kicker, title } = dict.sections.about;
 
   return (
@@ -22,7 +25,7 @@ export function About({ dict }: { dict: Dictionary }) {
               </p>
             ))}
           </div>
-          <FactStrip facts={profile.facts} />
+          <FactStrip facts={facts} />
         </div>
       </Container>
     </section>

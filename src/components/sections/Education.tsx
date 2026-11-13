@@ -1,11 +1,14 @@
 import { Container } from "@/components/ui/Container";
 import { FactStrip } from "@/components/ui/FactStrip";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { education } from "@/data/education";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getEducation } from "@/data/education";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Mirrors the About layout: heading left, degree details with a fact strip right. */
-export function Education({ dict }: { dict: Dictionary }) {
+export function Education({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const education = getEducation(locale);
   const { eyebrow, kicker, title, finalProject } = dict.sections.education;
 
   return (
@@ -26,8 +29,8 @@ export function Education({ dict }: { dict: Dictionary }) {
 
               <FactStrip
                 facts={[
-                  { label: "Location", value: item.location },
-                  { label: "Period", value: item.period.label },
+                  { label: item.labels.location, value: item.location },
+                  { label: item.labels.period, value: item.period.label },
                 ]}
               />
 

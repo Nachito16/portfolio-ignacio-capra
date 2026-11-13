@@ -1,8 +1,11 @@
-import { profile } from "@/data/profile";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProfile } from "@/data/profile";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Dark mono footer that continues the Contact band (and the Next-project band on project pages). */
-export function Footer({ dict }: { dict: Dictionary }) {
+export function Footer({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const profile = getProfile(locale);
   const links = [
     { label: "LinkedIn", href: profile.social.linkedin, external: true },
     { label: "GitHub", href: profile.social.github, external: true },
@@ -27,7 +30,7 @@ export function Footer({ dict }: { dict: Dictionary }) {
               {...(external && { target: "_blank", rel: "noopener noreferrer" })}
             >
               {label}
-              {external && <span className="sr-only"> (opens in a new tab)</span>}
+              {external && <span className="sr-only"> {dict.footer.newTab}</span>}
             </a>
           </li>
         ))}

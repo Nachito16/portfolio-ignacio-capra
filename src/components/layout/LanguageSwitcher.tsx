@@ -1,4 +1,7 @@
-import { locales, type Locale } from "@/i18n/config";
+"use client";
+
+import { usePathname } from "next/navigation";
+import { localePath, locales, stripLocale, type Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 
 type LanguageSwitcherProps = {
@@ -10,17 +13,19 @@ type LanguageSwitcherProps = {
 };
 
 /**
- * Language selector. Disabled locales are shown but not interactive until
- * their content and routing are added (see src/i18n/config.ts).
+ * Switches to the same page in the other language, keeping the current section (#hash).
+ * Uses a full navigation so <html lang> and metadata update with the page.
  */
 export function LanguageSwitcher({ current, label, comingSoonLabel, tone = "light", className }: LanguageSwitcherProps) {
   const dark = tone === "dark";
+  const { path } = stripLocale(usePathname() ?? "/");
 
   return (
     <ul aria-label={label} className={cn("flex items-center gap-1 font-mono text-[11px] tracking-[0.04em]", className)}>
       {locales.map((locale, index) => {
         const isCurrent = locale.code === current;
         const item = "inline-flex h-7 items-center rounded-[5px] px-1.5";
+        const href = localePath(locale.code, path);
 
         return (
           <li key={locale.code} className="flex items-center gap-1">
@@ -36,9 +41,13 @@ export function LanguageSwitcher({ current, label, comingSoonLabel, tone = "ligh
               </span>
             ) : locale.enabled ? (
               <a
-                href={`/${locale.code}`}
+                href={href}
                 lang={locale.code}
                 hrefLang={locale.code}
+                onClick={(event) => {
+                  // Keep the visitor on the same section in the other language.
+                  if (window.location.hash) event.currentTarget.href = `${href}${window.location.hash}`;
+                }}
                 className={cn(item, "transition-colors", dark ? "text-dim-2 hover:text-paper" : "text-muted hover:text-ink")}
               >
                 {locale.label}

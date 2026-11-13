@@ -1,11 +1,13 @@
 import { ImageResponse } from "next/og";
-import { profile } from "@/data/profile";
+import { getProfile } from "@/data/profile";
+import type { Locale } from "@/i18n/config";
 
 export const ogSize = { width: 1200, height: 630 };
-export const ogAlt = `${profile.name} — ${profile.role}`;
+export const ogAlt = "Ignacio Capra — Software Developer";
 
 /** Shared social preview image used by Open Graph and Twitter metadata routes. */
-export function renderOgImage() {
+export function renderOgImage(locale: Locale) {
+  const profile = getProfile(locale);
   return new ImageResponse(
     (
       <div

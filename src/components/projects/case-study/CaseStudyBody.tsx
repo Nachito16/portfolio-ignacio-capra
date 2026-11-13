@@ -1,7 +1,8 @@
 import { Container } from "@/components/ui/Container";
 import { FactStrip } from "@/components/ui/FactStrip";
 import type { CaseStudy } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import type { Locale } from "@/i18n/config";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { ArchitectureFlow, ArchitectureLayers } from "./ArchitectureDiagram";
 import { CaseStudySection, Prose } from "./CaseStudySection";
 import { WorkflowStep } from "./WorkflowStep";
@@ -11,7 +12,8 @@ type SectionId = keyof Dictionary["caseStudy"]["sections"];
 const order: SectionId[] = ["overview", "challenge", "solution", "features", "architecture", "stack", "learnings"];
 
 /** Full case study layout with a sticky mono table of contents on large screens. */
-export function CaseStudyBody({ caseStudy, dict }: { caseStudy: CaseStudy; dict: Dictionary }) {
+export function CaseStudyBody({ caseStudy, locale }: { caseStudy: CaseStudy; locale: Locale }) {
+  const dict = getDictionary(locale);
   const titles = dict.caseStudy.sections;
 
   const content: Record<SectionId, React.ReactNode> = {
@@ -34,7 +36,7 @@ export function CaseStudyBody({ caseStudy, dict }: { caseStudy: CaseStudy; dict:
     architecture: (
       <div className="space-y-10">
         <Prose paragraphs={[caseStudy.architecture.intro]} />
-        <ArchitectureFlow steps={caseStudy.architecture.flow} />
+        <ArchitectureFlow steps={caseStudy.architecture.flow} label={dict.caseStudy.dataFlow} />
         <ArchitectureLayers layers={caseStudy.architecture.layers} />
       </div>
     ),

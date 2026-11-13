@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { TagList } from "@/components/ui/Tag";
 import type { Project } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { localePath, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 import { ProjectLinks } from "./ProjectLinks";
 import { ProjectMeta } from "./ProjectMeta";
@@ -9,13 +10,14 @@ import { ProjectStage } from "./ProjectStage";
 
 type ProjectShowcaseProps = {
   project: Project;
-  dict: Dictionary;
+  locale: Locale;
   /** Places the visual on the right on desktop. Below 900px media always comes first. */
   reversed?: boolean;
 };
 
 /** Homepage project row: colored stage with the real screenshot(s) beside the project text. */
-export function ProjectShowcase({ project, dict, reversed }: ProjectShowcaseProps) {
+export function ProjectShowcase({ project, locale, reversed }: ProjectShowcaseProps) {
+  const dict = getDictionary(locale);
   const [summary] = project.description;
 
   return (
@@ -30,7 +32,7 @@ export function ProjectShowcase({ project, dict, reversed }: ProjectShowcaseProp
     >
       {/* The visual links to the project page; the button below is the keyboard path. */}
       <Link
-        href={`/projects/${project.slug}`}
+        href={localePath(locale, `/projects/${project.slug}`)}
         tabIndex={-1}
         className={cn("block", reversed && "min-[901px]:order-2")}
         data-reveal
@@ -70,7 +72,7 @@ export function ProjectShowcase({ project, dict, reversed }: ProjectShowcaseProp
         )}
 
         <TagList items={project.stack} label={dict.projects.stack} className={project.capabilities ? "" : "mt-6"} />
-        <ProjectLinks project={project} dict={dict} className="mt-8" />
+        <ProjectLinks project={project} locale={locale} className="mt-8" />
       </div>
     </article>
   );

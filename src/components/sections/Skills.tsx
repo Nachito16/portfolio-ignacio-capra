@@ -1,10 +1,14 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { expertise, technologies } from "@/data/skills";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getExpertise, getTechnologies } from "@/data/skills";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Four equal toolkit cards: each technology group with its expertise area. */
-export function Skills({ dict }: { dict: Dictionary }) {
+export function Skills({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const expertise = getExpertise(locale);
+  const technologies = getTechnologies(locale);
   const { eyebrow, kicker, title } = dict.sections.skills;
 
   return (

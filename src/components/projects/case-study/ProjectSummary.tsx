@@ -1,11 +1,13 @@
 import { Container } from "@/components/ui/Container";
 import type { Project } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { CaseStudySection, Prose } from "./CaseStudySection";
 import { Figure, StepHeading } from "./WorkflowStep";
 
 /** Lighter project page used until a full case study is written. */
-export function ProjectSummary({ project, dict }: { project: Project; dict: Dictionary }) {
+export function ProjectSummary({ project, locale }: { project: Project; locale: Locale }) {
+  const dict = getDictionary(locale);
   return (
     <Container className="space-y-[120px] py-[120px] max-[900px]:space-y-[90px] max-[900px]:py-[90px]">
       <CaseStudySection id="overview" index={1} title={dict.caseStudy.sections.overview}>

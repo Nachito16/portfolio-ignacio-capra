@@ -1,18 +1,20 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, ArrowUpRightIcon, GitHubIcon } from "@/components/ui/Icons";
 import type { Project } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { localePath, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 
 type ProjectLinksProps = {
   project: Project;
-  dict: Dictionary;
+  locale: Locale;
   /** Shows the link to the project's own page. */
   showDetails?: boolean;
   className?: string;
 };
 
-export function ProjectLinks({ project, dict, showDetails = true, className }: ProjectLinksProps) {
+export function ProjectLinks({ project, locale, showDetails = true, className }: ProjectLinksProps) {
+  const dict = getDictionary(locale);
   const { live, github } = project.links;
   const detailsLabel = project.caseStudy ? dict.actions.viewCaseStudy : dict.actions.viewDetails;
 
@@ -20,7 +22,7 @@ export function ProjectLinks({ project, dict, showDetails = true, className }: P
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
       {showDetails && (
         <ButtonLink
-          href={`/projects/${project.slug}`}
+          href={localePath(locale, `/projects/${project.slug}`)}
           icon={<ArrowRightIcon className="size-4" />}
           iconAfter
           aria-label={`${detailsLabel}: ${project.title}`}
@@ -29,12 +31,25 @@ export function ProjectLinks({ project, dict, showDetails = true, className }: P
         </ButtonLink>
       )}
       {live && (
-        <ButtonLink href={live} external variant="secondary" icon={<ArrowUpRightIcon className="size-4" />} iconAfter>
+        <ButtonLink
+          href={live}
+          external
+          newTabLabel={dict.footer.newTab}
+          variant="secondary"
+          icon={<ArrowUpRightIcon className="size-4" />}
+          iconAfter
+        >
           {dict.actions.liveSite}
         </ButtonLink>
       )}
       {github && (
-        <ButtonLink href={github} external variant="secondary" icon={<GitHubIcon className="size-4" />}>
+        <ButtonLink
+          href={github}
+          external
+          newTabLabel={dict.footer.newTab}
+          variant="secondary"
+          icon={<GitHubIcon className="size-4" />}
+        >
           {dict.actions.sourceCode}
         </ButtonLink>
       )}

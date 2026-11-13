@@ -6,22 +6,23 @@ import { useEffect, useRef, useState } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/ui/Icons";
 import { getNavItems } from "@/data/navigation";
-import { profile } from "@/data/profile";
-import type { Locale } from "@/i18n/config";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProfile } from "@/data/profile";
+import { localePath, stripLocale, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 type HeaderProps = {
-  dict: Dictionary;
   locale: Locale;
 };
 
 /** Floating capsule header. Turns into frosted glass after 24px of scroll; dropdown menu below 900px. */
-export function Header({ dict, locale }: HeaderProps) {
+export function Header({ locale }: HeaderProps) {
+  const dict = getDictionary(locale);
+  const profile = getProfile(locale);
   const pathname = usePathname();
-  const isHome = pathname === "/";
-  const navItems = getNavItems(dict);
+  const isHome = stripLocale(pathname ?? "/").path === "/";
+  const navItems = getNavItems(dict, locale);
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -103,7 +104,7 @@ export function Header({ dict, locale }: HeaderProps) {
             : "border-transparent",
         )}
       >
-        <Link href="/" aria-label={dict.nav.home} className="rounded-sm text-xl font-extrabold tracking-[-0.06em] text-ink">
+        <Link href={localePath(locale, "/")} aria-label={dict.nav.home} className="rounded-sm text-xl font-extrabold tracking-[-0.06em] text-ink">
           IC<span className="text-acid-deep">.</span>
         </Link>
 

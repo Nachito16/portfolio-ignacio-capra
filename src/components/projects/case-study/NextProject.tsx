@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import type { Project } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { localePath, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Full-bleed dark band leading to the next project; continues into the footer. */
-export function NextProject({ project, dict }: { project: Project; dict: Dictionary }) {
+export function NextProject({ project, locale }: { project: Project; locale: Locale }) {
+  const dict = getDictionary(locale);
   return (
     <div className="on-dark bleed bg-ink text-paper">
       <Link
-        href={`/projects/${project.slug}`}
+        href={localePath(locale, `/projects/${project.slug}`)}
         className="group flex items-center justify-between gap-8 py-[100px] max-[600px]:py-[70px]"
       >
         <span>

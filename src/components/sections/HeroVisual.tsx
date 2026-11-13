@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { profile } from "@/data/profile";
+import { getProfile, type Profile } from "@/data/profile";
+import type { Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 
 /** Rotated portrait card with an outline behind it, overlapped by a code card. */
-export function HeroVisual({ className }: { className?: string }) {
+export function HeroVisual({ locale, className }: { locale: Locale; className?: string }) {
+  const profile = getProfile(locale);
   const { photo } = profile;
 
   return (
@@ -32,13 +34,13 @@ export function HeroVisual({ className }: { className?: string }) {
         </figcaption>
       </figure>
 
-      <CodeCard className="absolute bottom-[22px] left-[-25px] w-[340px] -rotate-2 max-[900px]:left-0 max-[600px]:bottom-0 max-[600px]:w-[min(340px,100%)]" />
+      <CodeCard profile={profile} className="absolute bottom-[22px] left-[-25px] w-[340px] -rotate-2 max-[900px]:left-0 max-[600px]:bottom-0 max-[600px]:w-[min(340px,100%)]" />
     </div>
   );
 }
 
 /** Decorative code card summarizing the profile. Hidden from assistive tech; the same facts appear as text elsewhere. */
-function CodeCard({ className }: { className?: string }) {
+function CodeCard({ profile, className }: { profile: Profile; className?: string }) {
   const key = (name: string) => <span className="text-dim-4">{name}</span>;
   const str = (value: string) => <span className="text-code-string">&quot;{value}&quot;</span>;
   const punct = (value: string) => <span className="text-dim-1">{value}</span>;
@@ -74,12 +76,12 @@ function CodeCard({ className }: { className?: string }) {
         {"\n  "}
         {key("experience")}
         {punct(": ")}
-        {str("6+ years")}
+        {str(profile.code.experience)}
         {punct(",")}
         {"\n  "}
         {key("based")}
         {punct(": ")}
-        {str("Montevideo, UY")}
+        {str(profile.code.based)}
         {punct(",")}
         {"\n"}
         {punct("};")}

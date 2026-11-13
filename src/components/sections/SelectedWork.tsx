@@ -1,10 +1,12 @@
 import { ProjectShowcase } from "@/components/projects/ProjectShowcase";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { projects } from "@/data/projects";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProjects } from "@/data/projects";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
-export function SelectedWork({ dict }: { dict: Dictionary }) {
+export function SelectedWork({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
   const { eyebrow, kicker, title, description } = dict.sections.work;
 
   return (
@@ -17,8 +19,8 @@ export function SelectedWork({ dict }: { dict: Dictionary }) {
           </p>
         </div>
 
-        {projects.map((project, index) => (
-          <ProjectShowcase key={project.slug} project={project} dict={dict} reversed={index % 2 === 1} />
+        {getProjects(locale).map((project, index) => (
+          <ProjectShowcase key={project.slug} project={project} locale={locale} reversed={index % 2 === 1} />
         ))}
       </Container>
     </section>

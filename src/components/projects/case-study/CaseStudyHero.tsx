@@ -2,12 +2,14 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ArrowLeftIcon } from "@/components/ui/Icons";
 import type { Project } from "@/data/types";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { localePath, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { ProjectLinks } from "../ProjectLinks";
 import { ProjectMeta } from "../ProjectMeta";
 import { ProjectStage } from "../ProjectStage";
 
-export function CaseStudyHero({ project, dict }: { project: Project; dict: Dictionary }) {
+export function CaseStudyHero({ project, locale }: { project: Project; locale: Locale }) {
+  const dict = getDictionary(locale);
   const hasLinks = project.links.live !== undefined || project.links.github;
   const hero = project.caseStudy?.hero ?? project.cover;
 
@@ -19,7 +21,7 @@ export function CaseStudyHero({ project, dict }: { project: Project; dict: Dicti
       />
       <Container className="relative pt-[150px] max-[600px]:pt-[125px]">
         <Link
-          href="/#work"
+          href={localePath(locale, "/#work")}
           className="group inline-flex animate-reveal items-center gap-2 font-mono text-[11px] tracking-[0.08em] text-muted uppercase transition-colors duration-[180ms] hover:text-ink"
         >
           <ArrowLeftIcon className="size-4 transition-transform duration-[180ms] group-hover:-translate-x-0.5" />
@@ -40,7 +42,7 @@ export function CaseStudyHero({ project, dict }: { project: Project; dict: Dicti
         </div>
 
         {hasLinks && (
-          <ProjectLinks project={project} dict={dict} showDetails={false} className="mt-10 animate-reveal [animation-delay:200ms]" />
+          <ProjectLinks project={project} locale={locale} showDetails={false} className="mt-10 animate-reveal [animation-delay:200ms]" />
         )}
 
         <figure className="mt-14 animate-reveal [animation-delay:300ms] max-[600px]:mt-10">

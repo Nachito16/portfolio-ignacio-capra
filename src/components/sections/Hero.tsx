@@ -2,11 +2,14 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { ArrowRightIcon, DownloadIcon } from "@/components/ui/Icons";
 import { StatusIndicator } from "@/components/ui/StatusIndicator";
-import { profile } from "@/data/profile";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProfile } from "@/data/profile";
+import { localePath, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { HeroVisual } from "./HeroVisual";
 
-export function Hero({ dict }: { dict: Dictionary }) {
+export function Hero({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const profile = getProfile(locale);
   const { lead, emphasis } = profile.headlineParts;
 
   return (
@@ -34,7 +37,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
           </p>
 
           <div className="mt-10 flex animate-reveal flex-wrap gap-3 [animation-delay:300ms]">
-            <ButtonLink href="/#work" icon={<ArrowRightIcon className="size-4" />} iconAfter>
+            <ButtonLink href={localePath(locale, "/#work")} icon={<ArrowRightIcon className="size-4" />} iconAfter>
               {dict.actions.viewWork}
             </ButtonLink>
             <ButtonLink href={profile.cvUrl} download variant="secondary" icon={<DownloadIcon className="size-4" />}>
@@ -52,7 +55,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
           </ul>
         </div>
 
-        <HeroVisual className="animate-reveal [animation-delay:200ms]" />
+        <HeroVisual locale={locale} className="animate-reveal [animation-delay:200ms]" />
       </Container>
     </section>
   );

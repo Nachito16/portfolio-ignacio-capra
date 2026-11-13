@@ -27,6 +27,8 @@ type ButtonLinkProps = {
   size?: Size;
   /** Opens in a new tab with safe rel attributes. */
   external?: boolean;
+  /** Screen-reader hint appended to external links. */
+  newTabLabel?: string;
   /** Marks the link as a file download. */
   download?: boolean;
   icon?: ReactNode;
@@ -42,6 +44,7 @@ export function ButtonLink({
   variant = "primary",
   size = "md",
   external,
+  newTabLabel = "(opens in a new tab)",
   download,
   icon,
   iconAfter,
@@ -69,7 +72,7 @@ export function ButtonLink({
         {...rest}
       >
         {content}
-        {external && <span className="sr-only"> (opens in a new tab)</span>}
+        {external && <span className="sr-only"> {newTabLabel}</span>}
       </a>
     );
   }

@@ -1,10 +1,10 @@
 import type { CaseStudy } from "@/data/types";
 
 /** Left-to-right data flow; vertical below 900px. */
-export function ArchitectureFlow({ steps }: { steps: string[] }) {
+export function ArchitectureFlow({ steps, label }: { steps: string[]; label: string }) {
   return (
     <ol
-      aria-label="Data flow"
+      aria-label={label}
       className="flex items-stretch rounded-2xl bg-ink p-4 max-[900px]:flex-col max-[900px]:gap-2 sm:p-5"
       data-reveal
     >

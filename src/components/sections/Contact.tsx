@@ -2,11 +2,14 @@ import { ButtonLink } from "@/components/ui/Button";
 import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
 import { DownloadIcon, GitHubIcon, LinkedInIcon, MailIcon } from "@/components/ui/Icons";
 import { SectionKicker } from "@/components/ui/SectionHeading";
-import { profile } from "@/data/profile";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getProfile } from "@/data/profile";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Full-bleed dark band; the last word of the headline is set in acid green. */
-export function Contact({ dict }: { dict: Dictionary }) {
+export function Contact({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const profile = getProfile(locale);
   const { eyebrow, kicker } = dict.sections.contact;
   const headline = profile.contact.headline;
   const split = headline.lastIndexOf(" ");
@@ -57,10 +60,10 @@ export function Contact({ dict }: { dict: Dictionary }) {
           <ButtonLink href={`mailto:${profile.email}`} variant="acid" icon={<MailIcon className="size-4" />}>
             {dict.actions.emailMe}
           </ButtonLink>
-          <ButtonLink href={profile.social.linkedin} external variant="ghost-dark" icon={<LinkedInIcon className="size-4" />}>
+          <ButtonLink href={profile.social.linkedin} external newTabLabel={dict.footer.newTab} variant="ghost-dark" icon={<LinkedInIcon className="size-4" />}>
             LinkedIn
           </ButtonLink>
-          <ButtonLink href={profile.social.github} external variant="ghost-dark" icon={<GitHubIcon className="size-4" />}>
+          <ButtonLink href={profile.social.github} external newTabLabel={dict.footer.newTab} variant="ghost-dark" icon={<GitHubIcon className="size-4" />}>
             GitHub
           </ButtonLink>
           <ButtonLink href={profile.cvUrl} download variant="ghost-dark" icon={<DownloadIcon className="size-4" />}>

@@ -68,6 +68,7 @@ export const en = {
     },
     screens: "Screens",
     layers: "Layers",
+    dataFlow: "Data flow",
     onThisPage: "On this page",
     nextProject: "Next project",
     inProgress:
@@ -76,6 +77,16 @@ export const en = {
   footer: {
     rights: "All rights reserved.",
     backToTop: "Back to top",
+    newTab: "(opens in a new tab)",
+  },
+  notFound: {
+    label: "Not found",
+    title: "Page not found",
+    text: "The page you're looking for doesn't exist or has been moved.",
+    back: "Back to home",
+  },
+  meta: {
+    projectsTitle: "Projects",
   },
 };
 

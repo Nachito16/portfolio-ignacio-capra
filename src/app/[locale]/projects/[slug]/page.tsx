@@ -4,54 +4,54 @@ import { CaseStudyBody } from "@/components/projects/case-study/CaseStudyBody";
 import { CaseStudyHero } from "@/components/projects/case-study/CaseStudyHero";
 import { NextProject } from "@/components/projects/case-study/NextProject";
 import { ProjectSummary } from "@/components/projects/case-study/ProjectSummary";
-import { getNextProject, getProject, projects } from "@/data/projects";
-import { defaultLocale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getNextProject, getProject, projectSlugs } from "@/data/projects";
+import { isLocale } from "@/i18n/config";
+import { alternatesFor } from "@/lib/site";
 
 type ProjectPageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 };
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return projectSlugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProject(slug);
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const project = getProject(locale, slug);
   if (!project) return {};
 
   const title = `${project.title} — ${project.category}`;
   const description = project.description[0];
-  const path = `/projects/${project.slug}`;
+  const alternates = alternatesFor(locale, `/projects/${project.slug}`);
 
   return {
     title,
     description,
-    alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title, description },
+    alternates,
+    openGraph: { type: "article", url: alternates.canonical, title, description },
     twitter: { title, description },
   };
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
-  const project = getProject(slug);
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) notFound();
+  const project = getProject(locale, slug);
   if (!project) notFound();
-
-  const dict = getDictionary(defaultLocale);
 
   return (
     <>
-      <CaseStudyHero project={project} dict={dict} />
+      <CaseStudyHero project={project} locale={locale} />
       {project.caseStudy ? (
-        <CaseStudyBody caseStudy={project.caseStudy} dict={dict} />
+        <CaseStudyBody caseStudy={project.caseStudy} locale={locale} />
       ) : (
-        <ProjectSummary project={project} dict={dict} />
+        <ProjectSummary project={project} locale={locale} />
       )}
-      <NextProject project={getNextProject(project.slug)} dict={dict} />
+      <NextProject project={getNextProject(locale, project.slug)} locale={locale} />
     </>
   );
 }

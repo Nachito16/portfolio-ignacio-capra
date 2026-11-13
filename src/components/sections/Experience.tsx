@@ -1,10 +1,13 @@
 import { ExperienceRow } from "@/components/experience/ExperienceItem";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { experience } from "@/data/experience";
-import type { Dictionary } from "@/i18n/dictionaries";
+import { getExperience } from "@/data/experience";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /** Full-bleed dark band. Each role is a horizontal row; earlier TCS roles follow as compact rows. */
-export function Experience({ dict }: { dict: Dictionary }) {
+export function Experience({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const experience = getExperience(locale);
   const { eyebrow, kicker, title, description } = dict.sections.experience;
   let index = 0;
 

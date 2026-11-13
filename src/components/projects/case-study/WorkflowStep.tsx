@@ -2,7 +2,16 @@ import { MediaFrame } from "@/components/ui/MediaFrame";
 import type { Media, WorkflowStep as Step } from "@/data/types";
 
 const isPortrait = (media: Media) => (media.height ?? 0) > (media.width ?? 0);
+/** Nearly square or taller-than-wide dashboards would run past a full screen at column width. */
+const isTall = (media: Media) => (media.height ?? 0) > (media.width ?? 1) * 0.9;
 const wideSizes = "(max-width: 900px) calc(100vw - 48px), 930px";
+
+/** Width rules for a screenshot inside a multi-screenshot step. */
+function stackedFigure(media: Media) {
+  if (isPortrait(media)) return { className: "mx-auto w-full max-w-[220px]", sizes: "(max-width: 640px) 60vw, 220px" };
+  if (isTall(media)) return { className: "mx-auto w-full max-w-[720px]", sizes: "(max-width: 900px) calc(100vw - 48px), 720px" };
+  return { className: undefined, sizes: wideSizes };
+}
 
 /**
  * One stage of the product workflow: numbered heading, explanation, and its screenshots.
@@ -26,7 +35,7 @@ export function WorkflowStep({ step, index }: { step: Step; index: number }) {
       {heading}
       <div className="mt-9 space-y-12">
         {step.media.map((media) => (
-          <Figure key={media.src ?? media.alt} media={media} sizes={wideSizes} />
+          <Figure key={media.src ?? media.alt} media={media} {...stackedFigure(media)} />
         ))}
       </div>
     </div>
